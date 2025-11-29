@@ -25,3 +25,17 @@ def train(model, data, optimizer):
     optimizer.step()
 
     return loss.item()
+
+@torch.no_grad()
+def test(model, data):
+    model.eval()
+    out = model(data.x, data.edge_index)
+    pred = out.argmax(dim=1)
+
+    accuracies = []
+    for mask in [data.train_mask, data.val_mask, data.test_mask]:
+        correct = pred[mask].eq(data.y[mask]).sum().item()
+        acc = correct / mask.sum().item()
+        accuracies.append(acc)
+
+    return accuracies
