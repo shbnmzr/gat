@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from mpmath.libmp import trailing
 from torch_geometric.nn import GATConv
 
 class GAT(nn.Module):
@@ -22,3 +23,12 @@ class GAT(nn.Module):
             concat=False,
             dropout=dropout,
         )
+
+    def forward(self, x, edge_index):
+        x = F.dropout(x, p=self.dropout, training=self.training)
+        x = F.elu(self.gat1(x, edge_index))
+
+        x = F.dropout(x, p=self.dropout, training=self.training)
+        x = self.gat2(x, edge_index)
+
+        return F.log_softmax(x, dim=1)
