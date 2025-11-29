@@ -23,6 +23,8 @@ class GAT(nn.Module):
             dropout=dropout,
         )
 
+        self.dropout = dropout
+
     def forward(self, x, edge_index):
         x = F.dropout(x, p=self.dropout, training=self.training)
         x = F.elu(self.gat1(x, edge_index))
