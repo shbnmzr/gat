@@ -4,5 +4,12 @@ from models.gat import GAT
 import torch
 import torch.nn.functional as F
 
-dataset = Planetoid(root='data/Cora', name='Cora', transform=NormalizeFeatures())
-data = dataset[0]
+# Load dataset
+def load_dataset():
+    dataset = Planetoid(
+        root='data/Cora',
+        name='Cora',
+        transform=NormalizeFeatures(),
+    )
+
+    return dataset
